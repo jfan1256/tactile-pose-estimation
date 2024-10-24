@@ -1,0 +1,19 @@
+# Pycharm
+__pycache__/
+*.pyc
+personaltrading.egg-info
+.idea
+
+# API
+api.yaml
+
+# Jupyter Notebbok
+.ipynb_checkpoints
+
+# Data
+*.parquet.brotli
+*.csv
+*.json
+*.pkl
+*.txt
+
