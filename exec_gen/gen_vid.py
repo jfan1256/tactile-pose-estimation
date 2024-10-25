@@ -1,10 +1,6 @@
-import numpy as np
-import pickle
 import cv2
+import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import scipy.io
-from utils_func import tactile_reading, findFrame, normalize, readTs, tactile_to_3channel, normalize_with_range
 
 BODY_25_color = np.array([[255, 0, 0], [255, 51, 0], [255, 102, 0], [255, 153, 0], [255, 204, 0], [255, 255, 0], [204, 255, 0]
                          , [153, 255, 0], [102, 255, 0], [51, 255, 0], [0, 255, 0], [0, 255, 51], [0, 255, 102], [0,255,153]
@@ -175,14 +171,12 @@ def plot3Dheatmap(data):
 
     return img
 
-def generateVideo(data, path, heatmap, tile_coord=tile_pos):
+def generate_vid(data, path, heatmap, tile_coord=tile_pos):
     heatmap_GT = data[0]
     heatmap_pred = data[1]
     keypoint_GT = data[2]
     keypoint_pred = data[3]
     touch = data[4]
-
-    # print (heatmap_GT.shape, heatmap_pred.shape)
 
     '''save video'''
     fourcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
@@ -208,42 +202,18 @@ def generateVideo(data, path, heatmap, tile_coord=tile_pos):
                                        , tile_coord=tile_coord, tactile_frame=tactile_frame
                                        , topVeiw=False, GT_pred_compare=False),(320,240))
 
-        # cv2.imwrite('./recordings/img/gt%06d.jpg' % i, img3)
-        # cv2.imwrite('./recordings/img/tactile%06d.jpg' % i, (1-tactile_frame) * 255)
-        # cv2.imwrite('./recordings/img/pred%06d.jpg' % i, img4)
-
         data = [np.reshape(keypoint_GT[i,:,:],(21,3)), np.reshape(keypoint_pred[i,:,:],(21,3))]
         img5 = cv2.resize(plotKeypoint(data, scale=19, tactile=True, tile_coord=tile_coord, tactile_frame=tactile_frame
                                        , topVeiw=False, GT_pred_compare=True),(640,480))
 
-        # img5 = cv2.resize(plotKeypoint(np.reshape(keypoint_GT[i,:,:],(21,3)), scale=100, tactile=False
-        #                                , tile_coord=tile_coord, tactile_frame=tactile_frame, topVeiw=False),(320,240))
-        # img6 = cv2.resize(plotKeypoint(np.reshape(keypoint_pred[i,:,:],(21,3)), scale=100, tactile=False
-        #                                , tile_coord=tile_coord, tactile_frame=tactile_frame, topVeiw=False),(320,240))
-        # img7 = cv2.resize(plotKeypoint(np.reshape(keypoint_GT[i,:,:],(21,3)), scale=100, tactile=True
-        #                                , tile_coord=tile_coord, tactile_frame=tactile_frame, topVeiw=True),(320,240))
-        # img8 = cv2.resize(plotKeypoint(np.reshape(keypoint_pred[i,:,:],(21,3)), scale=100, tactile=True
-        #                                , tile_coord=tile_coord, tactile_frame=tactile_frame, topVeiw=True),(320,240))
-
         image2 = np.concatenate((img3, img4), axis=0)
-        # image3 = np.concatenate((img5, img6), axis=0)
-        # image5 = np.concatenate((img7, img8), axis=0)
 
         if heatmap:
             image1 = np.concatenate((img1, img2), axis=0)
             image4 = np.concatenate((image1, image2), axis=1)
             image = np.concatenate((image4, img5), axis=1)
-            # image6 = np.concatenate((image4, image3), axis=1)
-            # image = np.concatenate((image6, image5), axis=1)
         else:
             image = np.concatenate((image2, img5), axis=1)
-
-
-        # print (image.shape)
-        # print (image1.shape, image2.shape)
-
-        # cv2.imshow('image', image)
-        # cv2.waitKey(1)
 
         out.write(image)
     exit(0)

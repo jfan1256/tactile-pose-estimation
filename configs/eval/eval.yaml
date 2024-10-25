@@ -1,22 +1,14 @@
 #********************************************************************************PATH********************************************************************************
 # Output
-output_dir: '../store/001/train'
+output_dir: '../store/001/eval'
 
 # Data
-train_path: '../data/train.csv'
-val_path: '../data/val.csv'
+test_path: '../data/test.csv'
 
 # Checkpoint
-use_train_checkpoint: False
-train_checkpoint: '../store/train_1/checkpoint_01.pth'
+eval_checkpoint: '../store/train_1/checkpoint_01.pth'
 
-#********************************************************************************TRAIN********************************************************************************
-# Distributed training
-distributed: False
-dist_url: 'tcp://'
-package: 'gloo'
-num_gpu: 1
-
+#********************************************************************************EVAL********************************************************************************
 # Device
 device: 'cuda:0'
 

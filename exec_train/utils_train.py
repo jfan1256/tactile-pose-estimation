@@ -96,7 +96,7 @@ def setup_model(configs):
     # Initialize model
     print_header("Initialize Model")
     model = TPCNN(configs=configs)
-    model = model.to(device=configs['train_device'])
+    model = model.to(device=configs['device'])
 
     # Initialize optimizer
     print_header("Initialize Optimizer")
@@ -162,8 +162,8 @@ def early_stop_check(val_stats, model_without_ddp, optimizer, configs, epoch, be
     patience = configs['early_stop']
 
     # Check for improvement
-    if val_stats['total_loss'] < best_loss:
-        best_loss = val_stats['total_loss']
+    if val_stats['loss_total'] < best_loss:
+        best_loss = val_stats['loss_total']
         epochs_without_improvement = 0
         torch.save({'model': model_without_ddp.state_dict(), 'optimizer': optimizer.state_dict(), 'config': configs, 'epoch': epoch}, os.path.join(configs['output_dir'], 'best_checkpoint.pth'))
     else:
